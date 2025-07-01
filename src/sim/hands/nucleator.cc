@@ -10,6 +10,8 @@
 #include "fiber_prop.h"
 #include "fiber_set.h"
 #include "simul.h"
+#include <iostream>
+#include <fstream>
 
 
 //------------------------------------------------------------------------------
@@ -38,7 +40,7 @@ ObjectList Nucleator::createFiber(Simul& sim, Vector pos, FiberProp const* fip, 
     if ( h && h->attached() )
     {
         // deviation angle from 'dir'
-        A = prop()->branch_angle;
+        A = hMonitor->forkAngle();
         // get mark from mother fiber:
         mk = h->fiber()->mark();
         // nucleating on the side of a 'mother' fiber:
@@ -151,6 +153,12 @@ ObjectList Nucleator::createFiber(Simul& sim, Vector pos, FiberProp const* fip, 
     real a = std::acos(dot(fib->dirEndM(), dir));
     std::clog << "nucleated with angle " << std::setw(8) << a << " along " << fib->dirEndM() << "\n";
 #endif
+	
+	std::ofstream myfile;
+	myfile.open ("nuc_times.txt", std::ios::out | std::ios::app);
+	myfile << sim.time() << "\n";
+	myfile.close();
+	
     opt.print_warnings(stderr, 1, " in nucleator:spec\n");
     assert_false(fib->invalid());
     return objs;

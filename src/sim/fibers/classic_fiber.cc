@@ -8,6 +8,7 @@
 #include "iowrapper.h"
 #include "messages.h"
 #include "space.h"
+#include "simul.h"
 
 
 //------------------------------------------------------------------------------
@@ -147,7 +148,17 @@ real ClassicFiber::stepPlusEnd()
         }
 #endif
         if ( RNG.test(cata) )
+		{
+			//Plus end begins to catastrophe... mark the time!
             mStateP = STATE_RED;
+			
+			real now = simul().time();
+			std::ofstream myfile;
+			myfile.open ("cat_times.txt", std::ios::out | std::ios::app);
+			myfile << now << "\n";
+			myfile.close();
+		}
+			
     }
     else if ( mStateP == STATE_RED )
     {

@@ -18,12 +18,18 @@
  */
 class Fork : public Couple
 {
+	
+	real equilibrium_angle;
+	
 #if ( DIM == 2 )
     /// sine of angle, with [up, down] sign in space for 2D
     mutable real sine;
 #endif
 public:
     
+	///fork angle
+	real forkAngle() const { return equilibrium_angle; }
+	
     /// constructor
     Fork(ForkProp const*, Vector const& w = Vector(0,0,0));
     
