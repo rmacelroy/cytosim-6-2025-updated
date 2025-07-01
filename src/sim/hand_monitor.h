@@ -62,6 +62,8 @@ public:
     
     /// signature of the Solid underlying the Single
     virtual ObjectSignature baseSignature() const { return 0; }
+	
+	virtual real   forkAngle() const { return 0; }
 
 };
 

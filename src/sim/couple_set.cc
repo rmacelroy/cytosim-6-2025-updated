@@ -12,6 +12,8 @@
 #include "duo_prop.h"
 #include "glossary.h"
 #include "simul.h"
+#include <iostream>
+#include <fstream>
 
 //------------------------------------------------------------------------------
 
@@ -904,6 +906,13 @@ void CoupleSet::uniAttach1(FiberSiteList& loc, CoupleStock& can)
         {
             can.pop();
             addFreeCouple(C);
+			
+			//WRITE ATTACH TIME TO A TEXT FILE -ryan
+			std::ofstream myfile;
+			myfile.open ("attach_times.txt", std::ios::out | std::ios::app);
+			myfile << simul_.time() << "\n";
+			myfile.close();
+			
             h->attach(i);
         }
     }
@@ -1074,7 +1083,24 @@ void CoupleSet::uniPrepare(PropertyList const& properties)
         CoupleProp const * P = static_cast<CoupleProp const*>(i);
         //assert_true( P->stocks.size() == P->stocks.recount() );
         if ( P->fast_diffusion > 0 )
-            uniCouples.push_back(P);
+		{
+			//This occurs when a couple detaches from a fiber...
+			uniCouples.push_back(P);
+			
+			//Write detach time to a text file! -ryan
+			if (simul_.time() != simul_.time_step())
+			{
+				//Write the time of detachment to a text file!
+				std::ofstream myfile;
+				myfile.open ("detach_times.txt", std::ios::out | std::ios::app);
+				myfile << simul_.time() << "\n";
+				myfile.close();
+			}
+			
+		}
+			
+			
+            
     }
 }
 
