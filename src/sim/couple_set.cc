@@ -915,13 +915,6 @@ void CoupleSet::uniAttach1(FiberSiteList& loc, CoupleStock& can)
         {
             can.pop();
             addFreeCouple(C);
-			
-			//WRITE ATTACH TIME TO A TEXT FILE -ryan
-			std::ofstream myfile;
-			myfile.open ("attach_times.txt", std::ios::out | std::ios::app);
-			myfile << simul_.time() << "\n";
-			myfile.close();
-			
             h->attach(i);
         }
     }
