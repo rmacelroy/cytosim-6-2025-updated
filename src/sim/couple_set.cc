@@ -66,15 +66,6 @@ void CoupleSet::uniStepCollect(Couple * obj)
             inventory_.unassign(obj);
             P->stocks.push(obj);
             ++P->uni_counts;
-
-	    //This occurs when a particle falls of a shrinking MT... log the time!
-            if (simul_.time() != simul_.time_step()){
-                
-                std::ofstream myfile;
-                myfile.open ("detach_times.txt", std::ios::out | std::ios::app);
-                myfile << simul_.time() << "\n";
-                myfile.close();
-            }
         }
         else
             obj->stepFF();
