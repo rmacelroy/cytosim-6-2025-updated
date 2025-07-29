@@ -154,11 +154,6 @@ ObjectList Nucleator::createFiber(Simul& sim, Vector pos, FiberProp const* fip, 
     std::clog << "nucleated with angle " << std::setw(8) << a << " along " << fib->dirEndM() << "\n";
 #endif
 	
-	std::ofstream myfile;
-	myfile.open ("nuc_times.txt", std::ios::out | std::ios::app);
-	myfile << sim.time() << "\n";
-	myfile.close();
-	
     opt.print_warnings(stderr, 1, " in nucleator:spec\n");
     assert_false(fib->invalid());
     return objs;

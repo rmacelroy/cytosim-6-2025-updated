@@ -66,15 +66,6 @@ void CoupleSet::uniStepCollect(Couple * obj)
             inventory_.unassign(obj);
             P->stocks.push(obj);
             ++P->uni_counts;
-
-	    //This occurs when a particle falls of a shrinking MT... log the time!
-            if (simul_.time() != simul_.time_step()){
-                
-                std::ofstream myfile;
-                myfile.open ("detach_times.txt", std::ios::out | std::ios::app);
-                myfile << simul_.time() << "\n";
-                myfile.close();
-            }
         }
         else
             obj->stepFF();
@@ -915,13 +906,6 @@ void CoupleSet::uniAttach1(FiberSiteList& loc, CoupleStock& can)
         {
             can.pop();
             addFreeCouple(C);
-			
-			//WRITE ATTACH TIME TO A TEXT FILE -ryan
-			std::ofstream myfile;
-			myfile.open ("attach_times.txt", std::ios::out | std::ios::app);
-			myfile << simul_.time() << "\n";
-			myfile.close();
-			
             h->attach(i);
         }
     }
@@ -1095,16 +1079,6 @@ void CoupleSet::uniPrepare(PropertyList const& properties)
 		{
 			//This occurs when a couple detaches from a fiber...
 			uniCouples.push_back(P);
-			
-			//Write detach time to a text file! -ryan
-			if (simul_.time() != simul_.time_step())
-			{
-				//Write the time of detachment to a text file!
-				std::ofstream myfile;
-				myfile.open ("detach_times.txt", std::ios::out | std::ios::app);
-				myfile << simul_.time() << "\n";
-				myfile.close();
-			}
 			
 		}
 			
