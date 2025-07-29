@@ -1020,7 +1020,7 @@ void CoupleSet::uniAttach(FiberSet const& fibers)
         
         if ( cnt > 0 )
         {
-            const real alpha = 2 * P->spaceVolume() / cnt;
+            const real alpha = P->spaceVolume() / cnt;
             
             if ( P->fast_diffusion == 2 )
             {
