@@ -228,10 +228,10 @@ void Couple::stepAA()
     Vector f = Couple::force();
     real mag = f.norm();
     
-    if ( cHand1->checkKramersDetachment(mag) )
+    //if ( cHand1->checkKramersDetachment(mag) )
         //cHand1->detach(); //DO NOT DETACH HAND 1 IF IT MAKES A BRANCH! -RYAN
     //else
-        cHand1->stepLoaded( f);
+    cHand1->stepLoaded( f);
     
     if ( cHand2->checkKramersDetachment(mag) )
         cHand2->detach();
