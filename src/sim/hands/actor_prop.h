@@ -23,9 +23,13 @@ public:
      @{
      */
     
+    FiberEnd track_end;
+    
+    /// if true, bind only to growing fiber ends
+    bool bind_only_growing_end;
     
     /// rate of event
-    real rate;
+    real rescue_chance;
     
     /// @}
 

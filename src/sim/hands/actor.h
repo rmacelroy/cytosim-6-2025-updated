@@ -31,6 +31,14 @@ public:
     /// constructor
     Actor(ActorProp const*, HandMonitor*);
     
+    /// attach the hand at the position described by site, or return false
+    bool attachmentAllowed(FiberSite&) const;
+    
+    /// this is called when the attachment point is beyond the plus end
+    void handleDisassemblyM();
+    
+    /// this is called when the attachment point is below the minus end
+    void handleDisassemblyP();
     
     /// simulate when `this` is attached but not under load
     void stepUnloaded();
