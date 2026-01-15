@@ -16,20 +16,7 @@ Actor::Actor(ActorProp const* p, HandMonitor* h)
     //throw InvalidParameter("the actor class is unfinished");
 }
 
-
 //------------------------------------------------------------------------------
-
-bool Actor::attachmentAllowed(FiberSite& sit) const
-{
-    if ( !Hand::attachmentAllowed(sit) )
-        return false;
-
-    // check if fiber end in growing:
-    if ( prop()->bind_only_growing_end && !sit.fiber()->isGrowing(sit.nearestEnd()) )
-        return false;
-    
-    return true;
-}
 
 
 void Actor::handleDisassemblyM()
@@ -74,53 +61,57 @@ void Rescuer::handleDisassemblyP()
 void Actor::stepUnloaded()
 {
     assert_true( attached() );
+	
+    real a = hAbs + prop()->line_diffusion_dt * RNG.sreal();
     
-    switch ( prop()->track_end )
+    const real M = hFiber->abscissaM();
+    const real P = hFiber->abscissaP();
+    
+    if ( a <= M )
     {
-        case NO_END:
-            break;
-            
-        case PLUS_END:
-            relocateP();
-            break;
-            
-        case MINUS_END:
-            relocateM();
-            break;
-            
-        case BOTH_ENDS:
-            moveToEnd(nearestEnd());
-            break;
-            
-        default:
-            throw InvalidParameter("invalid value of tracker:track_end");
+        if ( RNG.test_not(prop()->hold_growing_end[1]) )
+            return detach();
+        a = M;
     }
+    
+    if ( a >= P )
+    {
+        if ( RNG.test_not(prop()->hold_growing_end[0]) )
+            return detach();
+        a = P;
+    }
+
+    moveTo(a);
+    
 }
 
 
 void Actor::stepLoaded(Vector const& force)
 {
     assert_true( attached() );
-
-    switch ( prop()->track_end )
+    
+    real load = dot(force, dirFiber());
+    real diff = prop()->line_diffusion_dt * RNG.sreal();
+    real a = hAbs + diff + prop()->movability_dt * load;
+    
+    const real M = hFiber->abscissaM();
+    const real P = hFiber->abscissaP();
+    
+    if ( a <= M )
     {
-        case NO_END:
-            break;
-            
-        case PLUS_END:
-            relocateP();
-            break;
-            
-        case MINUS_END:
-            relocateM();
-            break;
-            
-        case BOTH_ENDS:
-            moveToEnd(nearestEnd());
-            break;
-            
-        default:
-            throw InvalidParameter("invalid value of tracker:track_end");
+        if ( RNG.test_not(prop()->hold_growing_end[1]) )
+            return detach();
+        a = M;
     }
+    
+    if ( a >= P )
+    {
+        if ( RNG.test_not(prop()->hold_growing_end[0]) )
+            return detach();
+        a = P;
+    }
+
+    moveTo(a);
+
 }
 
